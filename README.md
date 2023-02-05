@@ -1,6 +1,6 @@
 # Aircamp
 
-<img src="https://github.com/AbhinavSingh95/pig-game/blob/main/GIF/AirCamp.gif"/>
+<img src="https://github.com/AbhinavSingh95/aircamp/blob/main/GIF/AirCamp.gif"/>
 # Features
 
 -   Responsive web design (RWD)
@@ -105,4 +105,4 @@ $ npm run dev
 
 # License
 
-Licensed under the MIT License, Copyright © 2022-present AbhinavSingh.
+Licensed under the MIT License, Copyright © 2022-present AbhinavSingh95.
