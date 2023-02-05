@@ -1,66 +1,65 @@
-if (process.env.NODE_ENV !== "production"){
-    require('dotenv').config();
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
 }
 
-const express = require('express');
-const methodOverride = require('method-override');
-const path = require('path');
-const mongoose = require('mongoose');
-const ejsMate = require('ejs-mate');
-const ExpressError = require('./utils/ExpressError');
-const session = require('express-session');
-const flash = require('connect-flash');
-const mongoSanatize = require('express-mongo-sanitize');
-const helmet = require('helmet');
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const MongoDBStore = require('connect-mongo')(session);
-const User = require('./models/user');
+const express = require("express");
+const methodOverride = require("method-override");
+const path = require("path");
+const mongoose = require("mongoose");
+const ejsMate = require("ejs-mate");
+const ExpressError = require("./utils/ExpressError");
+const session = require("express-session");
+const flash = require("connect-flash");
+const mongoSanatize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const MongoDBStore = require("connect-mongo")(session);
+const User = require("./models/user");
 
-const campgroundsRoutes = require('./routes/campgrounds');
-const reviewsRoutes = require('./routes/reviews');
-const userRoutes = require('./routes/users');
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
-const secret = process.env.SECRET || 'asecret';
+const campgroundsRoutes = require("./routes/campgrounds");
+const reviewsRoutes = require("./routes/reviews");
+const userRoutes = require("./routes/users");
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+const secret = process.env.SECRET || "asecret";
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
-    useFindAndModify: false
+    useFindAndModify: false,
 });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log('Database Connected');
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database Connected");
 });
-
 
 const app = express();
 
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-app.use(express.urlencoded({extended: true}));
-app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanatize());
 
 const store = new MongoDBStore({
     url: dbUrl,
     secret,
-    touchAfter: 24 * 60 * 60
+    touchAfter: 24 * 60 * 60,
 });
 
-store.on("error", function(e){
-    console.log("Session store error", e)
-})
+store.on("error", function (e) {
+    console.log("Session store error", e);
+});
 
 const sessionConfig = {
     store,
-    name: 'campsess',
+    name: "campsess",
     secret,
     resave: false,
     saveUninitialized: true,
@@ -68,9 +67,9 @@ const sessionConfig = {
         httpOnly: true,
         //secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
-    }
-}
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
+};
 
 app.use(session(sessionConfig));
 app.use(flash());
@@ -83,7 +82,6 @@ const scriptSrcUrls = [
     "https://kit.fontawesome.com",
     "https://cdnjs.cloudflare.com",
     "https://cdn.jsdelivr.net",
-
 ];
 const styleSrcUrls = [
     "https://kit-free.fontawesome.com",
@@ -131,36 +129,35 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    if (!['/login', '/', '/logout'].includes(req.originalUrl)){
+    if (!["/login", "/", "/logout"].includes(req.originalUrl)) {
         req.session.returnTo = req.originalUrl;
     }
     res.locals.currentUser = req.user;
-    res.locals.success = req.flash('success');
-    res.locals.error = req.flash('error');
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
     next();
-})
-
-app.use('/campgrounds', campgroundsRoutes)
-app.use('/campgrounds/:id/reviews', reviewsRoutes)
-app.use('/', userRoutes)
-
-app.get('/', (req,res) => {
-    res.render('home');
 });
 
-app.all('*', (req , res, next) => {
-    next(new ExpressError('Page Not Found', 404))
+app.use("/campgrounds", campgroundsRoutes);
+app.use("/campgrounds/:id/reviews", reviewsRoutes);
+app.use("/", userRoutes);
 
-})
+app.get("/", (req, res) => {
+    res.render("home");
+});
+
+app.all("*", (req, res, next) => {
+    next(new ExpressError("Page Not Found", 404));
+});
 
 app.use((err, req, res, next) => {
-    const { statusCode = 500 } = err
-    if (!err) err.message = 'Something Went Wrong!'
-    res.status(statusCode).render('error', { err });
+    const { statusCode = 500 } = err;
+    if (!err) err.message = "Something Went Wrong!";
+    res.status(statusCode).render("error", { err });
 });
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-    console.log(`listening on port ${port}`)
-})
+    console.log(`listening on port ${port}`);
+});
