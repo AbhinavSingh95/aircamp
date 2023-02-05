@@ -1,7 +1,12 @@
-# Aircamp
+<div align="center">
+  <h1>🏕️ AirCamp 🌲</h1>
+</div>
 
 <img src="https://github.com/AbhinavSingh95/aircamp/blob/main/GIF/AirCamp.gif"/>
-# Features
+
+<div align="center">
+  <h2>⚙️ Features ⚙️</h2>
+</div>
 
 -   Responsive web design (RWD)
 -   User authentication (Login/Register/Logout) and authorization (Post/Like/Edit)
@@ -61,7 +66,9 @@ PATCH     /campgrounds/:id/comments/:cid  Update comment
 DELETE    /campgrounds/:id/comments/:cid  Delete comment
 ```
 
-# Technologies
+<div align="center">
+  <h2>🛠️ Technologies 🛠️</h2>
+</div>
 
 ## Frontend
 
@@ -75,7 +82,9 @@ DELETE    /campgrounds/:id/comments/:cid  Delete comment
 
 Check [`package.json`](https://github.com/AbhinavSingh95/aircamp/blob/main/package.json) file for more information.
 
-# Getting Started
+<div align="center">
+  <h2>🏃 Getting Started 🏃 </h2>
+</div>
 
 Follow the instructions below to set up the environment and run this project on your local machine.
 
@@ -103,6 +112,8 @@ $ yarn install
 $ npm run dev
 ```
 
-# License
+<div align="center">
+  <h2>📝 License 📝 </h2>
+</div>
 
 Licensed under the MIT License, Copyright © 2022-present AbhinavSingh95.
